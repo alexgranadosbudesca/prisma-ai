@@ -3,6 +3,8 @@ import { Message } from './Message'
 import type { CognitiveTrait } from './CognitiveTrait'
 import { MessageRole } from './MessageRole'
 import { Uuid } from '@/Contexts/Shared/Domain/Uuid'
+import { AggregateRoot } from '@/Contexts/Shared/Domain/AggregateRoot'
+import { ScreeningSessionCompletedDomainEvent } from './ScreeningSessionCompletedDomainEvent'
 
 export interface ScreeningSessionSnapshot {
     id: string
@@ -15,7 +17,7 @@ export interface ScreeningSessionSnapshot {
     metadata: Record<string, unknown>
 }
 
-export class ScreeningSession {
+export class ScreeningSession extends AggregateRoot {
     private constructor(
         private readonly _id: Uuid,
         private readonly _userId: string,
@@ -25,7 +27,9 @@ export class ScreeningSession {
         private readonly _startedAt: Date,
         private _completedAt?: Date,
         private readonly _metadata: Record<string, unknown> = {}
-    ) {}
+    ) {
+        super()
+    }
 
     static create(userId: string): ScreeningSession {
         const systemMessage = Message.create({
@@ -112,6 +116,15 @@ export class ScreeningSession {
         this.ensureActive()
         this._status = SessionStatus.COMPLETED
         this._completedAt = new Date()
+
+        this.record(
+            new ScreeningSessionCompletedDomainEvent({
+                aggregateId: this._id.toString(),
+                userId: this._userId,
+                traitCount: this._traits.length,
+                completedAt: this._completedAt,
+            }),
+        )
     }
 
     canConclude(): boolean {

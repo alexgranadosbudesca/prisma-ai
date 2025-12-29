@@ -5,8 +5,8 @@ import { validate } from 'uuid'
 export class Uuid extends ValueObject<string> {
     protected constructor(value: string) {
         super(value)
-		this.ensureIsValidUuid(value)
-	}
+        this.ensureIsValidUuid(value)
+    }
 
     static from(value: string): Uuid {
         return new Uuid(value)

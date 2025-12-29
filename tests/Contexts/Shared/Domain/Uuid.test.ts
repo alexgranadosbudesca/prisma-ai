@@ -7,7 +7,7 @@ describe('Uuid', () => {
             const uuid = Uuid.generate()
             expect(uuid).toBeInstanceOf(Uuid)
             expect(uuid.toString()).toMatch(
-                /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+                /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
             )
         })
 
@@ -29,7 +29,7 @@ describe('Uuid', () => {
         it('should throw error for invalid UUID string', () => {
             const invalidUuid = 'not-a-valid-uuid'
             expect(() => Uuid.from(invalidUuid)).toThrow(
-                '<Uuid> does not allow the value <not-a-valid-uuid>',
+                '<Uuid> does not allow the value <not-a-valid-uuid>'
             )
         })
 
@@ -40,7 +40,7 @@ describe('Uuid', () => {
         it('should throw error for malformed UUID', () => {
             const malformedUuid = '550e8400-e29b-41d4-a716-44665544000'
             expect(() => Uuid.from(malformedUuid)).toThrow(
-                `<Uuid> does not allow the value <${malformedUuid}>`,
+                `<Uuid> does not allow the value <${malformedUuid}>`
             )
         })
     })

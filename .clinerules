@@ -1,0 +1,187 @@
+# PRISMA AI Project Guidelines
+
+## Architecture
+
+### Domain-Driven Design (DDD)
+- Follow DDD architecture with clear layer separation:
+  - **Domain**: Business logic, entities, value objects, aggregates, repository interfaces
+  - **Application**: Use cases, DTOs, orchestration
+  - **Infrastructure**: Concrete implementations (persistence, AI, external services)
+  - **Presentation**: API routes, controllers
+
+### Folder Structure
+```
+src/
+├── contexts/                        # Bounded Contexts (not "modules")
+│   └── [ContextName]/              # PascalCase naming
+│       ├── domain/
+│       │   └── [Aggregate]/        # One folder per aggregate
+│       │       ├── [Aggregate].ts
+│       │       ├── [Entity].ts
+│       │       ├── [ValueObject].ts
+│       │       └── [Repository].ts (interface)
+│       ├── application/
+│       │   └── [UseCase]/          # One folder per use case
+│       │       ├── [UseCase].use-case.ts
+│       │       └── [UseCase].request.ts  # DTOs (not .dto.ts)
+│       └── infrastructure/
+│           ├── Ai/
+│           ├── Persistence/
+│           └── ...
+```
+
+### SOLID Principles
+- **SRP**: Each class has a single responsibility
+- **OCP**: Open to extension, closed to modification (use Strategy Pattern for extensibility)
+- **LSP**: Implementations must be interchangeable
+- **ISP**: Small and specific interfaces
+- **DIP**: Depend on abstractions, not concrete implementations
+
+### Dependency Management
+- Manual dependency injection in API routes
+- Instantiate dependencies directly where needed
+- Keep construction logic simple and explicit
+
+## Code Conventions
+
+### Naming
+- **Files and folders**: PascalCase (e.g., `ProcessMessage/`, `ScreeningSession.ts`)
+- **Variables and functions**: camelCase
+- **Constants**: UPPER_SNAKE_CASE (if applicable)
+- **Interfaces**: No `I` prefix (e.g., `ScreeningRepository`, not `IScreeningRepository`)
+- **Entities**: No `Entity` suffix (e.g., `Message`, not `MessageEntity`)
+- **Services**: Use descriptive action verbs (e.g., `GenerateScreeningResponse`, not `ScreeningResponseService`)
+
+### TypeScript
+- **Arrays**: Use short syntax `T[]` and `readonly T[]` (not `Array<T>` nor `ReadonlyArray<T>`)
+- **Variables**: Descriptive names, minimum 2 characters (not `t`, `m`, use `trait`, `message`)
+- **Type imports**: Use `import type` for type-only imports
+- **any**: Forbidden, use specific typing
+- **Value Objects**: Use for IDs (e.g., `Uuid`), states, categories
+
+### Code Style
+- **Prettier**:
+  - `tabWidth: 4`
+  - `semi: false` (no semicolons)
+  - `singleQuote: true`
+  - `trailingComma: "es5"`
+  - `printWidth: 100`
+  - `arrowParens: "avoid"`
+
+- **ESLint**:
+  - Mandatory blank line before `return`
+  - Minimum identifier length: 2 characters (except `i`, `_`)
+  - No floating promises (always use `await`)
+  - No unused variables (allow `_` prefix)
+
+### Comments
+- **DO NOT add comments in code** (code should be self-explanatory)
+- Use JSDoc only if absolutely necessary for public API documentation
+
+## Domain-Driven Design Patterns
+
+### Aggregates
+- One file per aggregate with all related entities inside
+- The aggregate root controls access to all entities in the aggregate
+- Example: `ScreeningSession` is the aggregate root controlling `Message[]` and `CognitiveTrait[]`
+
+### Value Objects
+- Immutable
+- Validation in constructor
+- `equals()` method for value comparison
+- Examples: `Uuid`, `SessionStatus`, `MessageRole`, `TraitCategory`
+
+### Repositories
+- Interface in `domain/`
+- Implementation in `infrastructure/persistence/`
+- Methods express business intent (e.g., `findActiveByUserId()`)
+- **Must be registered as Singleton in DI container**
+
+### Use Cases
+- One use case per file
+- Receive dependencies through constructor
+- Only orchestration, NO business logic
+- Business logic goes in the domain
+- Keep simple and focused on workflow
+
+### Domain Services
+- For logic that doesn't belong to a specific entity
+- Keep minimal and focused on domain concepts
+
+## Testing
+
+### Vitest
+- Tests outside `src/` in `tests/` folder
+- Test structure mirrors `src/` structure
+- Naming: `[File].test.ts`
+- Use `describe` to group related tests
+- Unit tests for value objects, entities, and domain services
+
+### Testing Approach
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+
+describe('UseCase', () => {
+    it('should work', () => {
+        const mockRepository = {
+            save: vi.fn(),
+            findById: vi.fn(),
+        }
+
+        const useCase = new UseCase(mockRepository)
+        // test
+    })
+})
+```
+
+## Tech Stack
+
+### Core
+- **Next.js 15** with App Router and React Compiler
+- **TypeScript** with strict mode
+- **PostgreSQL** (Supabase)
+- **Vercel AI SDK** with Anthropic Claude 3.5 Sonnet
+
+### Libraries
+- `uuid` for UUID generation
+- `zod` for schema validation
+- `@supabase/supabase-js` for persistence
+- `@ai-sdk/anthropic` and `ai` for LLM
+
+### Testing & Quality
+- `vitest` for unit tests
+- `@typescript-eslint` for linting
+- `prettier` for formatting
+
+## Business Rules (Screening Context)
+
+### ScreeningSession
+- Initial state: `ACTIVE`
+- System message is always first
+- Minimum 5 traits with confidence >= 0.7 to conclude
+- Can only be modified if `ACTIVE`
+
+### Tool Calling
+- Use Strategy Pattern for extensibility
+- Separate handlers per tool call type
+- Silent processing without interrupting conversation
+
+## Git & Commits
+- Descriptive commits in Spanish
+- Format: `[type]: brief description`
+- Types: `feat`, `fix`, `refactor`, `test`, `docs`, `style`, `chore`
+
+## Environment Variables
+```
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+ANTHROPIC_API_KEY=
+```
+
+## Important Notes
+- Prioritize MVP with future scalability
+- Maintain clear separation of concerns
+- Unit tests for critical domain logic (use Vitest)
+- Avoid coupling between layers
+- Domain interfaces must NOT know infrastructure details
+- Keep dependency construction explicit and simple

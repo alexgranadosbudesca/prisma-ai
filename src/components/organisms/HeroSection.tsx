@@ -4,6 +4,7 @@ import { GradientText } from '@/components/atoms/GradientText'
 import { CTAButton } from '@/components/molecules/CTAButton'
 import { Brain, Sparkles, Zap } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 export function HeroSection() {
     const [mounted, setMounted] = useState(false)
@@ -16,6 +17,18 @@ export function HeroSection() {
         <section className="relative overflow-hidden px-6 pt-20 pb-24 sm:px-8 lg:px-12 lg:pt-32 lg:pb-32">
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-indigo-100/40 via-transparent to-transparent dark:from-indigo-900/20" />
+
+            {/* Logo */}
+            <div className="absolute top-6 left-6 sm:top-8 sm:left-8 lg:top-12 lg:left-12">
+                <Image
+                    src="/prisma-logo.svg"
+                    alt="Prisma Logo"
+                    width={60}
+                    height={20}
+                    className="h-5 w-auto sm:h-6"
+                    priority
+                />
+            </div>
 
             <div className="relative mx-auto max-w-7xl">
                 <div

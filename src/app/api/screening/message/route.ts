@@ -1,8 +1,8 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { ProcessMessageUseCase } from '@/Contexts/screening/application/ProcessMessage/ProcessMessage.use-case'
-import { SupabaseScreeningRepository } from '@/Contexts/screening/infrastructure/Persistence/SupabaseScreeningRepository'
-import { GenerateScreeningResponseWithAnthropic } from '@/Contexts/screening/infrastructure/Ai/GenerateScreeningResponse'
+import { ProcessMessageUseCase } from '@/Contexts/Screening/Application/ProcessMessage/ProcessMessage.use-case'
+import { SupabaseScreeningRepository } from '@/Contexts/Screening/Infrastructure/Persistence/SupabaseScreeningRepository'
+import { GenerateScreeningResponseWithAnthropic } from '@/Contexts/Screening/Infrastructure/Ai/GenerateScreeningResponse'
 
 export async function POST(req: NextRequest) {
     try {

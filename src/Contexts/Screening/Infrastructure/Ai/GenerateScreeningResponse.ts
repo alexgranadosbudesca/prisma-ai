@@ -12,7 +12,7 @@ import { z } from 'zod'
 
 const registerTraitTool = {
     description: 'Registra un rasgo cognitivo detectado durante la conversación',
-    parameters: z.object({
+    inputSchema: z.object({
         category: z.enum([
             'INTELLECTUAL',
             'CREATIVE',
@@ -29,7 +29,7 @@ const registerTraitTool = {
 
 const concludeScreeningTool = {
     description: 'Finaliza la sesión de screening cuando hay evidencia suficiente',
-    parameters: z.object({
+    inputSchema: z.object({
         reason: z.string().describe('Justificación de por qué se concluye'),
     }),
 }
@@ -37,7 +37,7 @@ const concludeScreeningTool = {
 const askFollowUpTool = {
     description:
         'Solicita profundizar en un área específica (opcional, para guiar tu propia conversación)',
-    parameters: z.object({
+    inputSchema: z.object({
         area: z.string().describe('Área a explorar'),
         rationale: z.string().describe('Por qué es importante explorarla'),
     }),
@@ -60,7 +60,7 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
     }
 
     private async generateStaticResponse(
-        messages: { role: string; content: string }[]
+        messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>
     ): Promise<ScreeningResponse> {
         const result = await generateText({
             model: this.model,
@@ -70,7 +70,6 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
                 concludeScreening: concludeScreeningTool,
                 askFollowUp: askFollowUpTool,
             },
-            maxSteps: 5,
         })
 
         return {
@@ -78,13 +77,13 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
             toolCalls:
                 result.toolCalls?.map(toolCall => ({
                     name: toolCall.toolName,
-                    arguments: toolCall.args,
+                    arguments: (toolCall as any).args,
                 })) || [],
         }
     }
 
     private async generateStreamingResponse(
-        messages: { role: string; content: string }[],
+        messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
         onStream: (chunk: AIStreamChunk) => void
     ): Promise<ScreeningResponse> {
         const result = streamText({
@@ -95,7 +94,6 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
                 concludeScreening: concludeScreeningTool,
                 askFollowUp: askFollowUpTool,
             },
-            maxSteps: 5,
         })
 
         let fullText = ''
@@ -103,17 +101,17 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
 
         for await (const chunk of result.fullStream) {
             if (chunk.type === 'text-delta') {
-                fullText += chunk.textDelta
-                onStream({ type: 'text', content: chunk.textDelta })
+                fullText += chunk.text
+                onStream({ type: 'text', content: chunk.text })
             } else if (chunk.type === 'tool-call') {
                 toolCalls.push({
                     name: chunk.toolName,
-                    arguments: chunk.args,
+                    arguments: (chunk as any).args,
                 })
                 onStream({
                     type: 'tool_call',
                     toolName: chunk.toolName,
-                    toolArgs: chunk.args,
+                    toolArgs: (chunk as any).args,
                 })
             } else if (chunk.type === 'finish') {
                 onStream({ type: 'completion' })
@@ -143,9 +141,9 @@ export class GenerateScreeningResponseWithAnthropic implements ScreeningResponse
         })
     }
 
-    private formatMessages(messages: readonly Message[]): { role: string; content: string }[] {
+    private formatMessages(messages: readonly Message[]): Array<{ role: 'user' | 'assistant' | 'system'; content: string }> {
         return messages.map(message => ({
-            role: message.role.toLowerCase(),
+            role: message.role.toLowerCase() as 'user' | 'assistant' | 'system',
             content: message.content,
         }))
     }

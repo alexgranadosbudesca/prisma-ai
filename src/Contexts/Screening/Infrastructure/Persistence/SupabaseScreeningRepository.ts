@@ -1,7 +1,7 @@
 import type { ScreeningRepository } from '@/Contexts/Screening/Domain/ScreeningSession/ScreeningRepository'
 import type { ScreeningSessionSnapshot } from '@/Contexts/Screening/Domain/ScreeningSession/ScreeningSession'
 import { ScreeningSession } from '@/Contexts/Screening/Domain/ScreeningSession/ScreeningSession'
-import { Uuid } from '@/Contexts/Screening/Domain/ScreeningSession/Uuid'
+import { Uuid } from '@/Contexts/Shared/Domain/Uuid'
 import { Message } from '@/Contexts/Screening/Domain/ScreeningSession/Message'
 import { CognitiveTrait } from '@/Contexts/Screening/Domain/ScreeningSession/CognitiveTrait'
 import type { MessageRole } from '@/Contexts/Screening/Domain/ScreeningSession/MessageRole'

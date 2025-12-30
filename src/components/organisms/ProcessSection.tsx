@@ -4,9 +4,9 @@ import { ProcessStep } from '@/components/molecules/ProcessStep'
 const processSteps = [
     {
         number: 1,
-        title: 'Desahogo',
+        title: 'Conversación',
         description:
-            'Conversación libre y guiada. Cuenta tu historia sin presión. La IA escucha, pregunta y explora contigo las dimensiones de tu experiencia cognitiva y emocional.',
+            'Diálogo libre y guiado. Cuenta tu historia sin presión. La IA escucha, pregunta y explora contigo las dimensiones de tu experiencia cognitiva y emocional.',
         gradientClass: 'bg-gradient-to-br from-indigo-500 to-violet-600',
     },
     {

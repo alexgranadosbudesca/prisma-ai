@@ -12,7 +12,7 @@ export function CTASection() {
                     solo claridad.
                 </p>
                 <div className="mt-10">
-                    <CTAButton text="Iniciar chat gratuito" />
+                    <CTAButton text="Comenzar análisis" />
                 </div>
                 <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
                     Tu información está protegida y es completamente confidencial

@@ -12,7 +12,7 @@ interface EmpathyCardProps {
 export function EmpathyCard({ icon, iconColor, title, description }: EmpathyCardProps) {
     return (
         <Card className="border-slate-200 bg-white/50 backdrop-blur-sm transition-shadow hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/50">
-            <CardHeader>
+            <CardHeader className="flex flex-col items-center text-center">
                 <IconWrapper icon={icon} className={iconColor} />
                 <CardTitle className="text-slate-900 dark:text-slate-50">{title}</CardTitle>
                 <CardDescription className="text-slate-600 dark:text-slate-400">

@@ -15,7 +15,7 @@ export function Footer() {
                         />
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        © 2024 PRISMA. Arquitectura de mentes extraordinarias.
+                        © 2026 PRISMA. Mentes extraordinarias.
                     </p>
                 </div>
             </div>

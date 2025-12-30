@@ -13,7 +13,7 @@ const processSteps = [
         number: 2,
         title: 'Insight',
         description:
-            'Análisis inmediato durante la conversación. Recibes retroalimentación que conecta tus experiencias con constructos científicos validados en la literatura sobre AACC.',
+            'Análisis inmediato durante la conversación. Recibes retroalimentación que conecta tus experiencias con constructos científicos validados en la literatura sobre altas capacidades.',
         gradientClass: 'bg-gradient-to-br from-violet-500 to-purple-600',
     },
     {

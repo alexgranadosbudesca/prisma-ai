@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ChatMessage, MessageRole } from '@/components/molecules/ChatMessage'
+import { ChatMessage, type MessageRole } from '@/components/molecules/ChatMessage'
 import { useEffect, useRef } from 'react'
 
 export interface Message {

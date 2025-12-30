@@ -36,7 +36,7 @@ export default function ChatPage() {
                             transition={{ duration: 0.3 }}
                             className="flex-1 flex items-center justify-center"
                         >
-                            <ChatEmptyState onSuggestionClick={sendMessage} />
+                            <ChatEmptyState onSuggestionClick={(message) => void sendMessage(message)} />
                         </motion.div>
                     ) : (
                         <motion.div
@@ -54,7 +54,7 @@ export default function ChatPage() {
 
                 {/* Input (always visible) */}
                 <MessageInput
-                    onSend={sendMessage}
+                    onSend={(message, files) => void sendMessage(message, files)}
                     disabled={false}
                     isGenerating={isGenerating}
                 />

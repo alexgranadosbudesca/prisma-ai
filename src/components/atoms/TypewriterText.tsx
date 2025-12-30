@@ -20,6 +20,14 @@ export function TypewriterText({
 }: TypewriterTextProps) {
     const [displayedText, setDisplayedText] = useState('')
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [textKey, setTextKey] = useState(text)
+
+    // Reset when text changes (using key pattern)
+    if (textKey !== text) {
+        setTextKey(text)
+        setDisplayedText('')
+        setCurrentIndex(0)
+    }
 
     useEffect(() => {
         if (currentIndex < text.length) {
@@ -33,12 +41,6 @@ export function TypewriterText({
             onComplete()
         }
     }, [currentIndex, text, speed, onComplete])
-
-    // Reset when text changes
-    useEffect(() => {
-        setDisplayedText('')
-        setCurrentIndex(0)
-    }, [text])
 
     return (
         <motion.span

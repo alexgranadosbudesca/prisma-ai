@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { IconWrapper } from '@/components/atoms/IconWrapper'
-import { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 interface EmpathyCardProps {
     icon: LucideIcon

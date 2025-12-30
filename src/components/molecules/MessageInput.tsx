@@ -38,33 +38,33 @@ export function MessageInput({ onSend, disabled = false, isGenerating = false }:
         }
     }
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault()
             handleSend()
         }
     }
 
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault()
+    const handleDragOver = (event: React.DragEvent) => {
+        event.preventDefault()
         setIsDragging(true)
     }
 
-    const handleDragLeave = (e: React.DragEvent) => {
-        e.preventDefault()
+    const handleDragLeave = (event: React.DragEvent) => {
+        event.preventDefault()
         setIsDragging(false)
     }
 
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault()
+    const handleDrop = (event: React.DragEvent) => {
+        event.preventDefault()
         setIsDragging(false)
-        const files = Array.from(e.dataTransfer.files)
+        const files = Array.from(event.dataTransfer.files)
         setAttachedFiles(prev => [...prev, ...files])
     }
 
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const files = Array.from(e.target.files)
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const files = Array.from(event.target.files)
             setAttachedFiles(prev => [...prev, ...files])
         }
     }
@@ -176,7 +176,7 @@ export function MessageInput({ onSend, disabled = false, isGenerating = false }:
                         <textarea
                             ref={textareaRef}
                             value={message}
-                            onChange={e => setMessage(e.target.value)}
+                            onChange={event => setMessage(event.target.value)}
                             onKeyDown={handleKeyDown}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}

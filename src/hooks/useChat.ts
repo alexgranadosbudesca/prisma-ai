@@ -22,7 +22,7 @@ export function useChat(options: UseChatOptions = {}) {
     const userIdRef = useRef<string>(options.userId || `guest-${uuidv4()}`)
 
     const sendMessage = useCallback(
-        async (content: string, files?: File[]) => {
+        async (content: string, _files?: File[]) => {
             if (!content.trim()) return
 
             // Clear any previous error
@@ -112,7 +112,7 @@ export function useChat(options: UseChatOptions = {}) {
             setMessages(messages.slice(0, lastUserIndex + 1))
 
             // Resend
-            sendMessage(lastUserMessage.content)
+            void sendMessage(lastUserMessage.content)
         }
     }, [messages, sendMessage])
 
